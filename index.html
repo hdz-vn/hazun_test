@@ -53,10 +53,28 @@
         📝 Lời nhắn của tôi: Đây là trang web mà tôi bắt đầu tập hành đến với Github đấy ^_^
     </p>
     
-    <p>
+<p>
     🔗 <a href="#">Link web của tôi</a><br>
     📅 <span id="currentTime"></span>
-    </p>
+</p>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const options = {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        };
+        const formattedTime = now.toLocaleString('vi-VN', options);
+        document.getElementById('currentTime').textContent = formattedTime;
+    }
+    
+    updateTime(); // chạy ngay khi tải trang
+</script>
 
 </body>
 </html>
