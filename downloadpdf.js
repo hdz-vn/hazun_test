@@ -36,10 +36,5 @@ window.addEventListener('DOMContentLoaded', function() {
     button.style.fontSize = '16px';
     
     // Thêm nút vào đầu trang (có thể đổi vị trí tùy thích)
-    // Cách 1: Thêm ngay sau thẻ <body> (đầu trang)
     document.body.insertBefore(button, document.body.firstChild);
-    
-    // Cách 2: Thêm vào một vị trí cụ thể (ví dụ: trước footer)
-    const target = document.getElementById('pdf-button-area');
-    if (target) target.appendChild(button);
 });
