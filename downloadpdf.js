@@ -1,7 +1,6 @@
 function downloadAsPDF() {
-    // Kiểm tra xem thư viện html2pdf đã được tải chưa
     if (typeof html2pdf === 'undefined') {
-        console.error('Thư viện html2pdf chưa được nạp. Vui lòng thêm script vào trang.');
+        console.error('Thư viện downloadpdf chưa được nạp.');
         alert('Đang tải công cụ... Hãy thử lại sau vài giây.');
         return;
     }
