@@ -21,14 +21,10 @@
         }
 
         p {
-            background: white;
+            background: #e8f4fd;
             padding: 15px;
             border-radius: 10px;  /* bo góc */
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);  /* đổ bóng nhẹ */
-        }
-
-        .note {
-            background: #e8f4fd;
             border-left: 4px solid #3498db;
             font-style: italic;
         }
@@ -47,29 +43,6 @@
 
     <h1>Chào mừng đến với web test của tôi!</h1>
 
-    <p class="note">
+    <p>
         📝 Đây là trang web mà tôi bắt đầu tập tành khi tôi đến với Github đấy ^-^
     </p>
-
-<p>
-    🔗 <a href="#">Link web của tôi</a><br>
-    📅 <span id="currentTime"></span>
-</p>
-
-<script>
-    function updateTime() {
-        const now = new Date();
-        const options = {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true,
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        };
-        const formattedTime = now.toLocaleString('vi-VN', options);
-        document.getElementById('currentTime').textContent = formattedTime;
-    }
-
-    updateTime(); // chạy ngay khi tải trang
-</script
