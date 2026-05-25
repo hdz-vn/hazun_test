@@ -54,8 +54,28 @@
     </p>
     
     <p>
-        🔗 <a href="#">Link web của tôi</a><br>
-        📅 12:49 PM - 25/5/2026
+<p>
+    🔗 <a href="#">Link web của tôi</a><br>
+    📅 <span id="currentTime"></span>
+</p>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const options = {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        };
+        const formattedTime = now.toLocaleString('vi-VN', options);
+        document.getElementById('currentTime').textContent = formattedTime;
+    }
+    
+    updateTime(); // chạy ngay khi tải trang
+</script>
     </p>
 
 </body>
