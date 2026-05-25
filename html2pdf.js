@@ -1,8 +1,8 @@
 // Hàm tải PDF
 function downloadAsPDF() {
-    if (typeof downloadPDF === 'undefined') {
-        console.error('Thư viện downloadpdf.js chưa được nạp.');
-        alert('Đang tải công cụ... Hãy thử lại sau vài giây.');
+    if (typeof html2pdf === 'undefined') {
+        console.error('Thư viện html2pdf chưa được nạp.');
+        alert('Công cụ chưa sẵn sàng. Hãy thử lại sau vài giây.');
         return;
     }
     
@@ -20,12 +20,10 @@ function downloadAsPDF() {
 
 // Tự động tạo và chèn nút tải PDF vào trang khi file JS được tải
 window.addEventListener('DOMContentLoaded', function() {
-    // Tạo nút
     const button = document.createElement('button');
     button.innerHTML = '📥 Tải PDF tự động';
     button.onclick = downloadAsPDF;
     
-    // Tùy chọn: thêm style cho nút (để đẹp)
     button.style.margin = '20px 0';
     button.style.padding = '10px 20px';
     button.style.backgroundColor = '#2563eb';
@@ -35,6 +33,5 @@ window.addEventListener('DOMContentLoaded', function() {
     button.style.cursor = 'pointer';
     button.style.fontSize = '16px';
     
-    // Thêm nút vào đầu trang (có thể đổi vị trí tùy thích)
     document.body.insertBefore(button, document.body.firstChild);
 });
