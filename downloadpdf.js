@@ -3,7 +3,7 @@
 // Hàm tải PDF
 function downloadAsPDF() {
     if (typeof html2pdf === 'undefined') {
-        console.error('Thư viện html2pdf chưa được nạp.');
+        console.error('Thư viện downloadpdf.js chưa được nạp.');
         alert('Đang tải công cụ... Hãy thử lại sau vài giây.');
         return;
     }
