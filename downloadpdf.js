@@ -1,6 +1,6 @@
 // Hàm tải PDF
 function downloadAsPDF() {
-    if (typeof html2pdf === 'undefined') {
+    if (typeof downloadPDF === 'undefined') {
         console.error('Thư viện downloadpdf.js chưa được nạp.');
         alert('Đang tải công cụ... Hãy thử lại sau vài giây.');
         return;
