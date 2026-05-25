@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trang Test của Hazun</title>
+    <style>
+        /* Đây là phần CSS - toàn bộ phần "đẹp" nằm ở đây */
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;  /* căn giữa */
+            padding: 20px;
+            background-color: #f5f5f5;  /* màu nền xám nhạt */
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #2c3e50;  /* màu xanh đậm */
+            border-bottom: 3px solid #3498db;  /* gạch chân màu xanh dương */
+            padding-bottom: 10px;
+        }
+
+        p {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;  /* bo góc */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);  /* đổ bóng nhẹ */
+        }
+
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            font-style: italic;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Chào mừng đến với web test của tôi!</h1>
+
+    <p class="note">
+        📝 Đây là trang web mà tôi bắt đầu tập tành khi tôi đến với Github đấy ^-^
+    </p>
+
+<p>
+    🔗 <a href="#">Link web của tôi</a><br>
+    📅 <span id="currentTime"></span>
+</p>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const options = {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        };
+        const formattedTime = now.toLocaleString('vi-VN', options);
+        document.getElementById('currentTime').textContent = formattedTime;
+    }
+
+    updateTime(); // chạy ngay khi tải trang
+</script
