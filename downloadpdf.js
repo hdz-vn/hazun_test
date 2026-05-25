@@ -1,5 +1,3 @@
-// pdf-utils.js - Tự động thêm nút tải PDF và xử lý
-
 // Hàm tải PDF
 function downloadAsPDF() {
     if (typeof html2pdf === 'undefined') {
@@ -42,6 +40,6 @@ window.addEventListener('DOMContentLoaded', function() {
     document.body.insertBefore(button, document.body.firstChild);
     
     // Cách 2: Thêm vào một vị trí cụ thể (ví dụ: trước footer)
-    // const target = document.getElementById('pdf-button-area');
-    // if (target) target.appendChild(button);
+    const target = document.getElementById('pdf-button-area');
+    if (target) target.appendChild(button);
 });
