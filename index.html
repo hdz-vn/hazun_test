@@ -44,6 +44,48 @@
         a:hover {
             text-decoration: underline;
         }
+        /* ===== ⬇ NÚT PDF ⬇ ===== */
+        .pdf-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+            transition: all 0.2s ease;
+            margin: 20px 0 10px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #1c638c);
+            transform: scale(1.02);
+            box-shadow: 0 6px 14px rgba(52, 152, 219, 0.4);
+        }
+
+        .pdf-btn:active {
+            transform: scale(0.98);
+        }
+
+        @media print {
+            .pdf-btn {
+                display: none;
+            }
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            @page {
+                margin: 1.5cm;
+                size: A4;
+            }
+        }
+        /* ===== ⬆ NÚT PDF ⬆ ===== */
     </style>
 </head>
 <body>
