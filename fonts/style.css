@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'CraftyPE';
+    src: url('fonts/CraftyPE.otf') format('opentype');
+}
+
+body {
+    font-family: 'CraftyPE', sans-serif;
+}
