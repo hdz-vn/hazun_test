@@ -1,10 +1,10 @@
 /* <link rel="stylesheet" href="fonts/style.css"> */
 
 @font-face {
-    font-family: 'CraftyPE';
-    src: url('CraftyPE.otf') format('opentype');
+    font-family: 'Craftype';
+    src: url('Craftyơe.otf') format('opentype');
 }
 
 body {
-    font-family: 'CraftyPE', sans-serif;
+    font-family: 'Craftype', sans-serif;
 }
