@@ -1,0 +1,83 @@
+        @font-face {
+            font-family: 'Craftype';
+            src: url('fonts/craftype.otf') format('opentype');
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .sp {
+            font-family: 'Craftype', sans-serif;
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        p {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #3498db;
+            font-style: italic;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+        /* ===== ⬇ NÚT PDF ⬇ ===== */
+        .pdf-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+            transition: all 0.2s ease;
+            margin: 20px 0 10px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #1c638c);
+            transform: scale(1.02);
+            box-shadow: 0 6px 14px rgba(52, 152, 219, 0.4);
+        }
+
+        .pdf-btn:active {
+            transform: scale(0.98);
+        }
+
+        @media print {
+            .pdf-btn {
+                display: none;
+            }
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            @page {
+                margin: 1.5cm;
+                size: A4;
+            }
+        }
+        /* ===== ⬆ NÚT PDF ⬆ ===== */
