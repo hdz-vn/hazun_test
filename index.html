@@ -15,7 +15,12 @@
     <p class="sp">
         Tên trong Toki Pona (Sitelen Pona): 󱤑󱦐󱤰󱤀󱤑󱤀󱦆󱦑
     </p>
-
+    
+    <div id="menu" style="background: #2c3e50; padding: 10px 20px; margin-bottom: 20px; border-radius: 8px;">
+        <a href="/hazun_test/" style="color: white; margin-right: 20px; text-decoration: none;">🏠 Trang chủ</a>
+        <span id="menu-auto"></span>
+    </div>
+    
     <script>
         fetch('https://api.github.com/repos/haphantridungqsqn-spec/hazun_test/contents/')
             .then(res => res.json())
@@ -33,11 +38,6 @@
                 });
             });
     </script>
-
-    <div id="menu" style="background: #2c3e50; padding: 10px 20px; margin-bottom: 20px; border-radius: 8px;">
-        <a href="/hazun_test/" style="color: white; margin-right: 20px; text-decoration: none;">🏠 Trang chủ</a>
-        <span id="menu-auto"></span>
-    </div>
     
 </body>
 </html>
