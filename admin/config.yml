@@ -1,0 +1,21 @@
+backend:
+  name: github
+  repo: haphantridungqsqn-spec/hazun_test
+  branch: main
+  site_domain: haphantridungqsqn-spec.github.io
+
+# Thư mục chứa ảnh tải lên
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+# Cấu hình các loại nội dung (collections)
+collections:
+  - name: "pages"
+    label: "Trang con"
+    label_singular: "Trang"
+    folder: "content/pages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Tiêu đề", name: "title", widget: "string" }
+      - { label: "Nội dung", name: "body", widget: "markdown" }
