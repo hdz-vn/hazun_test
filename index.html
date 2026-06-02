@@ -38,7 +38,7 @@
 
         fetch('/hazun_test/templates/clock.html')
             .then(res => res.text())
-            .then(html => document.getElementById('clock')
+            .then(html => document.getElementById('clock'))
             .catch(err => console.error('Lỗi clock:', err));
 
         fetch('/hazun_test/templates/chat.html')
