@@ -8,8 +8,8 @@ function loadTemplate(id, fileName) {
 
 // Tự động chạy khi trang tải xong
 window.addEventListener('DOMContentLoaded', () => {
-    loadTemplate('security-place', 'security.html');
-    loadTemplate('menu-place', 'menu.html');
-    loadTemplate('clock-place', 'clock.html');
-    loadTemplate('chat-place', 'chat.html');
+    loadTemplate('security', 'security.html');
+    loadTemplate('menu', 'menu.html');
+    loadTemplate('clock', 'clock.html');
+    loadTemplate('chat', 'chat.html');
 });
