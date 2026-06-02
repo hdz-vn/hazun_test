@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flag Counter – Hazun Test</title>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bảo mật -->
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <!-- /Bảo mật -->
+</head>
+<body>
+
+    <!-- Nút quay về trang chủ -->
+    <a href="/hazun_test/" style="display: inline-block; margin-bottom: 20px; color: #3498db; text-decoration: none;">← Quay về trang chủ</a>
+
+    <h1>🌍 Flag Counter</h1>
+
+    <div style="text-align: center; margin: 30px 0; padding: 20px; background: #e8f4fd; border-radius: 12px; border-left: 4px solid #3498db;">
+        <h3 style="margin: 0 0 15px 0; color: #2c3e50;">Khách truy cập đến từ:</h3>
+        <div id="flag-list" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px 0;">
+            <!-- Flag sẽ hiện ở đây -->
+        </div>
+        <p id="visitor-count" style="font-size: 14px; color: #2c3e50;">Đang tải dữ liệu...</p>
+    </div>
+
+    <button class="pdf-btn" onclick="window.print()">📄 Lưu trang này thành PDF</button>
+
+    <script>
+        fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                const countryCode = data.country_code.toLowerCase();
+                const countryName = data.country_name;
+                const flagUrl = `https://flagcdn.com/w320/${countryCode}.png`;
+                
+                let visited = JSON.parse(localStorage.getItem('visitedFlags')) || [];
+                if (!visited.some(item => item.code === countryCode)) {
+                    visited.push({ code: countryCode, name: countryName, flag: flagUrl });
+                    localStorage.setItem('visitedFlags', JSON.stringify(visited));
+                }
+                
+                const container = document.getElementById('flag-list');
+                container.innerHTML = '';
+                visited.forEach(item => {
+                    container.innerHTML += `
+                        <div style="text-align: center; background: white; padding: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 85px;">
+                            <img src="${item.flag}" alt="${item.name}" style="width: 48px; border-radius: 4px;">
+                            <br><span style="font-size: 12px;">${item.name}</span>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('visitor-count').innerHTML = `✨ Đã có ${visited.length} quốc gia ghé thăm trang này!`;
+            })
+            .catch(() => {
+                document.getElementById('visitor-count').innerHTML = '⚠️ Không thể tải dữ liệu (thử lại sau)';
+            });
+    </script>
+
+    <!-- Tawk.to Chat -->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/6a1d6a0fb42bfb1c3049c506/1jq1ecjch';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+</body>
+</html>
