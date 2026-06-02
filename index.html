@@ -33,17 +33,17 @@
     <script>
         fetch('/hazun_test/templates/menu.html')
             .then(res => res.text())
-            .then(html => document.getElementById('menu').innerHTML = html)
+            .then(html => document.getElementById('menu'))
             .catch(err => console.error('Lỗi menu:', err));
 
         fetch('/hazun_test/templates/clock.html')
             .then(res => res.text())
-            .then(html => document.getElementById('clock').innerHTML = html)
+            .then(html => document.getElementById('clock')
             .catch(err => console.error('Lỗi clock:', err));
 
         fetch('/hazun_test/templates/chat.html')
             .then(res => res.text())
-            .then(html => document.getElementById('chat').innerHTML = html)
+            .then(html => document.getElementById('chat'))
             .catch(err => console.error('Lỗi chat:', err));
     </script>
 </body>
