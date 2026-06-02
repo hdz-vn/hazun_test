@@ -3,10 +3,14 @@
 <head>
     <title>Trang Test của Hazun</title>
     <link rel="stylesheet" href="style.css">
+    fetch('/hazun_test/templates/security.html')
+    .then(res => res.text())
+    .then(html => {
+        document.head.insertAdjacentHTML('beforeend', html);
+    });
 </head>
 <body>
 
-    <div id="security"></div>
     <div id="menu"></div>
     <div id="clock"></div>
 
