@@ -16,9 +16,6 @@
 </head>
 <body>
 
-    <div id="menu"></div>
-    <div id="clock"></div>
-
     <h1>Chào mừng đến với web test của tôi!</h1>
     <p>📝 Đây là trang web mà tôi bắt đầu tập tành khi tôi đến với Github đấy ^-^</p>
     <p class="sp">Tên trong Toki Pona (Sitelen Pona): 󱤑󱦐󱤰󱤀󱤑󱤀󱦆󱦑</p>
@@ -27,6 +24,19 @@
     
     <div id="chat"></div>
 
-    <script src="templates/load.js"></script>
+    <script>
+        fetch('/hazun_test/templates/menu.html')
+                .then(res => res.text())
+                .then(html => document.getElementById('menu').innerHTML = html)
+                .catch(err => console.error('Lỗi menu:', err));
+        fetch('/hazun_test/templates/clock.html')
+                .then(res => res.text())
+                .then(html => document.getElementById('clock').innerHTML = html)
+                .catch(err => console.error('Lỗi clock:', err));
+        fetch('/hazun_test/templates/chat.html')
+            .then(res => res.text())
+            .then(html => document.getElementById('chat').innerHTML = html)
+            .catch(err => console.error('Lỗi chat:', err));
+    </script>
 </body>
 </html>
