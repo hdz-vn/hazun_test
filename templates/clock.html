@@ -1,0 +1,20 @@
+<div class="time-widget" style="display: inline-block; background: #e8f4fd; padding: 6px 12px; border-radius: 20px; border-left: 3px solid #3498db;">
+    🕒 <span id="currentTimeVN">--:--:--</span>
+</div>
+
+<script>
+    function updateClock() {
+        const now = new Date();
+        const timeString = now.toLocaleString('vi-VN', {
+            timeZone: 'Asia/Ho_Chi_Minh',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+        const clockSpan = document.getElementById('currentTimeVN');
+        if (clockSpan) clockSpan.textContent = timeString;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+</script>
