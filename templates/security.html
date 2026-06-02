@@ -1,0 +1,21 @@
+<!-- Bảo mật cơ bản cho web tĩnh -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Chống clickjacking (không cho nhúng web vào iframe lạ) -->
+<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+
+<!-- Chống MIME sniffing (tránh trình duyệt đoán kiểu file sai) -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+<!-- Chống XSS cơ bản (bật bộ lọc của trình duyệt) -->
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+<!-- Kiểm soát thông tin referrer (không gửi đầy đủ đường dẫn sang trang khác) -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<!-- Không cho phép trình duyệt tự động phát hiện số điện thoại để gọi -->
+<meta name="format-detection" content="telephone=no">
+
+<!-- Chống lỗi clickjacking thêm lớp bảo vệ -->
+<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
