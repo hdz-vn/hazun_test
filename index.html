@@ -5,13 +5,7 @@
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Bảo mật -->
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <!-- /Bảo mật -->
+    <div id="templates/security"></div>
     
 </head>
 <body>
@@ -27,45 +21,9 @@
     </p>
 
     <button class="pdf-btn" onclick="window.print()">📄 Lưu trang này thành PDF</button>
-    
-    <!-- Menu tự động -->
-    
-    <div id="menu" style="background: #2c3e50; padding: 10px 20px; margin-bottom: 20px; border-radius: 8px;">
-        <a href="/hazun_test/" style="color: white; margin-right: 20px; text-decoration: none;">🏠 Trang chủ</a>
-        <span id="menu-auto"></span>
-    </div>
 
-    <script>
-        fetch('https://api.github.com/repos/haphantridungqsqn-spec/hazun_test/contents/')
-            .then(res => res.json())
-            .then(files => {
-                const menu = document.getElementById('menu-auto');
-                files.forEach(file => {
-                    if (file.name.endsWith('.html') && file.name !== 'index.html') {
-                        const name = file.name.replace('.html', '');
-                        const link = document.createElement('a');
-                        link.href = `/hazun_test/${name}`;
-                        link.textContent = `📄 ${name.replace(/-/g, ' ')}`;
-                        link.style.cssText = 'color: white; margin-right: 20px; text-decoration: none;';
-                        menu.appendChild(link);
-                    }
-                });
-            });
-    </script>
-    <!-- /Menu tự động -->
-    
-    <!-- Start of Tawk.to Script -->
-    <script type="text/javascript">
-        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-        (function(){
-        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-        s1.async=true;
-        s1.src='https://embed.tawk.to/6a1d6a0fb42bfb1c3049c506/1jq1ecjch';
-        s1.charset='UTF-8';
-        s1.setAttribute('crossorigin','*');
-        s0.parentNode.insertBefore(s1,s0);
-        })();
-    </script>
-    <!-- End of Tawk.to Script -->
+    <div id="templates/clock"></div>
+    <div id="templates/menu"></div>
+    <div id="templates/chat"></div>
 </body>
 </html>
