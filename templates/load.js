@@ -8,9 +8,8 @@ function loadTemplate(id, fileName) {
 
 // Tự động chạy khi trang tải xong
 window.addEventListener('DOMContentLoaded', () => {
-    loadTemplate('security-place', 'security.html');  // ← thêm '-place'
-    loadTemplate('menu-place', 'menu.html');          // ← thêm '-place'
-    loadTemplate('clock-place', 'clock.html');        // ← thêm '-place'
-    loadTemplate('chat-place', 'chat.html');          // ← thêm '-place'
-    loadTemplate('footer-place', 'footer.html');      // ← thêm dòng này
+    loadTemplate('security', 'security.html');  // ← thêm '-place'
+    loadTemplate('menu', 'menu.html');          // ← thêm '-place'
+    loadTemplate('clock', 'clock.html');        // ← thêm '-place'
+    loadTemplate('chat', 'chat.html');          // ← thêm '-place'
 });
