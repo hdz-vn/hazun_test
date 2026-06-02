@@ -1,5 +1,7 @@
-<div class="time-widget" style="display: inline-block; background: #e8f4fd; padding: 6px 12px; border-radius: 20px; border-left: 3px solid #3498db;">
-    🕒 <span id="currentTimeVN">--:--:--</span>
+<div style="text-align: right; margin: 10px 0;">
+    <div style="display: inline-block; background: #e8f4fd; padding: 6px 12px; border-radius: 20px; border-left: 3px solid #3498db;">
+        🕒 <span id="currentTimeVN">--:--:--</span>
+    </div>
 </div>
 
 <script>
@@ -12,8 +14,8 @@
             second: '2-digit',
             hour12: false
         });
-        const clockSpan = document.getElementById('currentTimeVN');
-        if (clockSpan) clockSpan.textContent = timeString;
+        const el = document.getElementById('currentTimeVN');
+        if (el) el.textContent = timeString;
     }
     updateClock();
     setInterval(updateClock, 1000);
