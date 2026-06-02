@@ -11,6 +11,5 @@ window.addEventListener('DOMContentLoaded', () => {
     loadTemplate('security-place', 'security.html');
     loadTemplate('menu-place', 'menu.html');
     loadTemplate('clock-place', 'clock.html');
-    loadTemplate('footer-place', 'footer.html');
     loadTemplate('chat-place', 'chat.html');
 });
