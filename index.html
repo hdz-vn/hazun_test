@@ -3,11 +3,16 @@
 <head>
     <title>Trang Test của Hazun</title>
     <link rel="stylesheet" href="style.css">
-    fetch('/hazun_test/templates/security.html')
-    .then(res => res.text())
-    .then(html => {
-        document.head.insertAdjacentHTML('beforeend', html);
-    });
+    
+    <script>
+        // Tải meta bảo mật từ template và chèn vào head
+        fetch('/hazun_test/templates/security.html')
+            .then(res => res.text())
+            .then(html => {
+                document.head.insertAdjacentHTML('beforeend', html);
+            })
+            .catch(err => console.error('Lỗi tải bảo mật:', err));
+    </script>
 </head>
 <body>
 
@@ -19,9 +24,9 @@
     <p class="sp">Tên trong Toki Pona (Sitelen Pona): 󱤑󱦐󱤰󱤀󱤑󱤀󱦆󱦑</p>
 
     <button class="pdf-btn" onclick="window.print()">📄 Lưu trang này thành PDF</button>
+    
     <div id="chat"></div>
 
-    <!-- Chỉ một dòng để gọi toàn bộ template -->
     <script src="templates/load.js"></script>
 </body>
 </html>
