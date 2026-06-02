@@ -2,19 +2,21 @@
 <html>
 <head>
     <title>Testfork</title>
-    <link rel="stylesheet" href="style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <! IDK !>
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <! /IDK !>
+
+    <script>
+        fetch('/hazun_test/templates/head.html')
+            .then(res => res.text())
+            .then(html => {
+                document.head.insertAdjacentHTML('beforeend', html);
+            })
+            .catch(err => console.error('Lỗi tải bảo mật:', err));
+    </script>
 </head>
 <body>
 
-    <a href="/hazun_test/">← Quay về trang chủ</a>
+    <div id="menu"></div>
+    <div id="clock"></div>
+    <div id="chat"></div>
 
     <h1>IDK dành cho bạn</h1>
 
@@ -32,18 +34,15 @@
     </div>
 
     <button class="pdf-btn" onclick="window.print()">📄 Lưu trang này thành PDF</button>
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-        (function(){
-        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-        s1.async=true;
-        s1.src='https://embed.tawk.to/6a1d6a0fb42bfb1c3049c506/1jq1ecjch';
-        s1.charset='UTF-8';
-        s1.setAttribute('crossorigin','*');
-        s0.parentNode.insertBefore(s1,s0);
-        })();
+
+    <script src="templates/load.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTemplate('menu', 'menu.html');
+            loadTemplate('clock', 'clock.html');
+            loadTemplate('chat', 'chat.html');
+        });
     </script>
-    <!--End of Tawk.to Script-->
+    
 </body>
 </html>
