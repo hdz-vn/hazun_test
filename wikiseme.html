@@ -13,6 +13,7 @@
         .history-item { background: white; padding: 10px; margin: 10px 0; border-left: 3px solid #3498db; font-size: 0.9em; }
     </style>
     <script>
+        // Tải head.html (các meta bảo mật, v.v.)
         fetch('/hazun_test/templates/head.html')
             .then(res => res.text())
             .then(html => document.head.insertAdjacentHTML('beforeend', html))
@@ -34,6 +35,7 @@
         const ISSUE_NUMBER = 1;
         const CLIENT_ID = 'Ov23liq2gWzrIA8KhDVK';
 
+        // ======================= CÁC HÀM CHÍNH =======================
         function getTokenFromUrl() {
             const hash = window.location.hash.substring(1);
             const params = new URLSearchParams(hash);
@@ -104,8 +106,7 @@
             };
             document.getElementById('cancel-btn').onclick = () => {
                 contentDiv.innerHTML = originalContent;
-                // Gắn lại nút Sửa vì nó đã bị xóa khỏi DOM
-                attachEditButton();
+                attachEditButton(); // Gắn lại nút Sửa
             };
         }
 
@@ -129,7 +130,6 @@
 
         function attachEditButton() {
             const contentDiv = document.getElementById('content-area');
-            // Kiểm tra nếu nút Sửa chưa tồn tại
             if (!document.getElementById('dynamic-edit-btn')) {
                 const editBtn = document.createElement('button');
                 editBtn.id = 'dynamic-edit-btn';
@@ -154,7 +154,7 @@
             }
         }
 
-        // Hàm tải các template bổ sung (menu, clock, chat)
+        // ======================= HÀM TẢI TEMPLATE =======================
         async function loadTemplate(id, fileName) {
             try {
                 const res = await fetch(`/hazun_test/templates/${fileName}`);
@@ -164,11 +164,13 @@
                 if (el) el.innerHTML = html;
             } catch (err) {
                 console.error(`Lỗi tải ${fileName}:`, err);
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = `<p style="color:red;">⚠️ Không thể tải ${fileName}</p>`;
             }
         }
 
-        // Khởi tạo toàn bộ trang
-        async function init() {
+        // ======================= KHỞI TẠO =======================
+        (async function init() {
             // Xử lý token từ URL
             const token = getTokenFromUrl();
             if (token) {
@@ -181,13 +183,11 @@
             await loadHistory();
             attachEditButton();
 
-            // Tải menu, clock, chat sau khi trang đã sẵn sàng
+            // Tải menu, clock, chat (chạy ngầm, không await để tránh chậm)
             loadTemplate('menu-place', 'menu.html');
             loadTemplate('clock-place', 'clock.html');
             loadTemplate('chat-place', 'chat.html');
-        }
-
-        init();
+        })();
     </script>
 </body>
 </html>
