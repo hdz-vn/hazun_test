@@ -1,70 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hazun Test - Wiki Engine</title>
+    <title>Wiki Xí Muội – Hazun Test</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <!-- Thêm thư viện Markdown để hiển thị nội dung đẹp -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        /* Bổ sung style cho nút và form edit */
-        .edit-area {
-            width: 100%;
-            height: 400px;
-            font-family: monospace;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #3498db;
-            border-radius: 8px;
-        }
-        button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
+        .edit-area { width: 100%; height: 400px; font-family: monospace; padding: 10px; margin: 10px 0; border: 1px solid #3498db; border-radius: 8px; }
+        button { background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-right: 10px; }
         button:hover { background: #2980b9; }
-        .history-item {
-            background: white;
-            padding: 10px;
-            margin: 10px 0;
-            border-left: 3px solid #3498db;
-            font-size: 0.9em;
-        }
+        .history-item { background: white; padding: 10px; margin: 10px 0; border-left: 3px solid #3498db; font-size: 0.9em; }
     </style>
 </head>
 <body>
-
     <div id="login-area" style="text-align: right; margin-bottom: 20px;"></div>
-    <div id="content-area">
-        <h1>Đang tải nội dung...</h1>
-    </div>
+    <div id="content-area"><h1>Đang tải nội dung...</h1></div>
     <div id="history-area" style="margin-top: 30px;"></div>
 
     <script>
-        // ================= CẤU HÌNH =================
-        const OWNER = 'haphantridungqsqn-spec'; // Username GitHub của bạn
-        const REPO = 'hazun_test';              // Tên repository
-        const ISSUE_NUMBER = 1;                 // Issue số 1 để lưu nội dung
-        const CLIENT_ID = 'YOUR_CLIENT_ID';     // Client ID của OAuth App
+        const OWNER = 'haphantridungqsqn-spec';
+        const REPO = 'hazun_test';
+        const ISSUE_NUMBER = 1;
+        const CLIENT_ID = 'Ov23liq2gWzrIA8KhDVK';
 
-        // Helper: Lấy token từ URL sau khi đăng nhập
         function getTokenFromUrl() {
             const hash = window.location.hash.substring(1);
             const params = new URLSearchParams(hash);
             return params.get('access_token');
         }
 
-        // Hiển thị nội dung chính
         async function loadContent() {
             try {
                 const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}`);
                 const issue = await res.json();
-                // Chuyển Markdown từ issue.body sang HTML
                 const htmlContent = marked.parse(issue.body || '*Chưa có nội dung.*');
                 document.getElementById('content-area').innerHTML = `<div>${htmlContent}</div>`;
             } catch (err) {
@@ -72,24 +41,20 @@
             }
         }
 
-        // Kiểm tra quyền Collaborator
         async function checkCollaborator(token) {
             const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/collaborators`, {
                 headers: { 'Authorization': `token ${token}` }
             });
+            if (!res.ok) return false;
             const collaborators = await res.json();
-            const currentUserRes = await fetch('https://api.github.com/user', {
-                headers: { 'Authorization': `token ${token}` }
-            });
-            const currentUser = await currentUserRes.json();
+            const userRes = await fetch('https://api.github.com/user', { headers: { 'Authorization': `token ${token}` } });
+            if (!userRes.ok) return false;
+            const currentUser = await userRes.json();
             return collaborators.some(collab => collab.login === currentUser.login);
         }
 
-        // Tạo form chỉnh sửa
         function showEditForm(currentContent) {
-            const contentDiv = document.getElementById('content-area');
-            const currentHtml = contentDiv.innerHTML;
-            contentDiv.innerHTML = `
+            document.getElementById('content-area').innerHTML = `
                 <textarea id="edit-textarea" class="edit-area">${currentContent}</textarea>
                 <button id="save-btn">💾 Lưu nội dung</button>
                 <button id="cancel-btn">❌ Hủy</button>
@@ -99,22 +64,18 @@
                 const token = localStorage.getItem('gh_token');
                 const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}`, {
                     method: 'PATCH',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ body: newBody })
                 });
                 if (res.ok) {
                     alert('Đã lưu thành công!');
-                    loadContent(); // Tải lại nội dung mới
-                    loadHistory();  // Tải lại lịch sử (nếu có)
+                    loadContent();
+                    loadHistory();
                 } else alert('Lỗi khi lưu!');
             };
-            document.getElementById('cancel-btn').onclick = () => loadContent();
+            document.getElementById('cancel-btn').onclick = () => { loadContent(); loadHistory(); };
         }
 
-        // Hiển thị lịch sử chỉnh sửa (timeline)
         async function loadHistory() {
             const token = localStorage.getItem('gh_token');
             if (!token) return;
@@ -122,6 +83,7 @@
                 const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}/timeline`, {
                     headers: { 'Authorization': `token ${token}` }
                 });
+                if (!res.ok) return;
                 const events = await res.json();
                 const historyHtml = events.filter(e => e.event === 'commented' || e.event === 'renamed').map(e => `
                     <div class="history-item">
@@ -133,29 +95,27 @@
             } catch(err) { console.error(err); }
         }
 
-        // Xử lý đăng nhập
         async function init() {
             const token = getTokenFromUrl();
             if (token) {
                 localStorage.setItem('gh_token', token);
-                window.history.replaceState({}, document.title, window.location.pathname); // Xóa token khỏi URL
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
             const savedToken = localStorage.getItem('gh_token');
             const loginArea = document.getElementById('login-area');
+
             if (!savedToken) {
                 loginArea.innerHTML = `<a href="https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=repo">🔐 Đăng nhập GitHub để sửa trang</a>`;
                 await loadContent();
                 return;
             }
-            // Kiểm tra quyền
+
             const isCollaborator = await checkCollaborator(savedToken);
             if (isCollaborator) {
                 loginArea.innerHTML = `✅ Đã đăng nhập (${OWNER}) | <button id="logout-btn">🚪 Đăng xuất</button>`;
                 document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('gh_token'); location.reload(); };
                 await loadContent();
                 await loadHistory();
-                // Thêm nút sửa trang
-                const contentDiv = document.getElementById('content-area');
                 const editBtn = document.createElement('button');
                 editBtn.textContent = '✏️ Sửa trang này';
                 editBtn.onclick = async () => {
@@ -163,14 +123,13 @@
                     const issue = await issueRes.json();
                     showEditForm(issue.body);
                 };
-                contentDiv.appendChild(editBtn);
+                document.getElementById('content-area').appendChild(editBtn);
             } else {
                 loginArea.innerHTML = `⚠️ Bạn không có quyền sửa trang này. (${OWNER}) <button id="logout-btn">🚪 Đăng xuất</button>`;
                 document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('gh_token'); location.reload(); };
                 await loadContent();
             }
         }
-
         init();
     </script>
 </body>
