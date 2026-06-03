@@ -6,4 +6,4 @@ Có thể chỉ toàn là từ AI ra nên đừng có mong chờ chi  =)))
 
 Link web: https://haphantridungqsqn-spec.github.io/hazun_test/
 
-*<sub>PageSpeed Insights: <a href="https://pagespeed.web.dev/analysis/https-haphantridungqsqn-spec-github-io-hazun_test/n636050l0l">Here</a> | "hazun_test" sử dụng bản quyền là <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></sub>*
+*<sub>PageSpeed Insights: <a href="https://pagespeed.web.dev/analysis/https-haphantridungqsqn-spec-github-io-hazun_test/ur4lyjqf2l">Here</a> | "hazun_test" sử dụng bản quyền là <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></sub>*
