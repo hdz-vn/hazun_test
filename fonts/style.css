@@ -1,6 +1,7 @@
 @font-face {
     font-family: 'Craftype';
     src: url('craftyơe.otf') format('opentype');
+    font-display: swap;
 }
 
 body {
