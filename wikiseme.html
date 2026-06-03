@@ -15,17 +15,15 @@
     <script>
         fetch('/hazun_test/templates/head.html')
             .then(res => res.text())
-            .then(html => {
-                document.head.insertAdjacentHTML('beforeend', html);
-            })
-            .catch(err => console.error('Lỗi tải bảo mật:', err));
+            .then(html => document.head.insertAdjacentHTML('beforeend', html))
+            .catch(err => console.error('Lỗi tải head.html:', err));
     </script>
 </head>
 <body>
     <header role="banner">
-        <div id="menu"></div>
-        <div id="clock"></div>
-        <div id="chat"></div>
+        <div id="menu-place"></div>
+        <div id="clock-place"></div>
+        <div id="chat-place"></div>
     </header>
     <div id="content-area"><h1>Đang tải nội dung...</h1></div>
     <div id="history-area" style="margin-top: 30px;"></div>
@@ -45,47 +43,70 @@
         async function loadContent() {
             try {
                 const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const issue = await res.json();
                 const htmlContent = marked.parse(issue.body || '*Chưa có nội dung.*');
                 document.getElementById('content-area').innerHTML = `<div>${htmlContent}</div>`;
             } catch (err) {
-                document.getElementById('content-area').innerHTML = '<p>Lỗi khi tải nội dung.</p>';
+                console.error('Lỗi load content:', err);
+                document.getElementById('content-area').innerHTML = '<p>⚠️ Lỗi khi tải nội dung.</p>';
             }
         }
 
         async function checkCollaborator(token) {
-            const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/collaborators`, {
-                headers: { 'Authorization': `token ${token}` }
-            });
-            if (!res.ok) return false;
-            const collaborators = await res.json();
-            const userRes = await fetch('https://api.github.com/user', { headers: { 'Authorization': `token ${token}` } });
-            if (!userRes.ok) return false;
-            const currentUser = await userRes.json();
-            return collaborators.some(collab => collab.login === currentUser.login);
+            try {
+                const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/collaborators`, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+                if (!res.ok) return false;
+                const collaborators = await res.json();
+                const userRes = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+                if (!userRes.ok) return false;
+                const currentUser = await userRes.json();
+                return collaborators.some(collab => collab.login === currentUser.login);
+            } catch (err) {
+                console.error('Lỗi kiểm tra collaborator:', err);
+                return false;
+            }
         }
 
         function showEditForm(currentContent) {
-            document.getElementById('content-area').innerHTML = `
+            const contentDiv = document.getElementById('content-area');
+            const originalContent = contentDiv.innerHTML;
+            contentDiv.innerHTML = `
                 <textarea id="edit-textarea" class="edit-area">${currentContent}</textarea>
-                <button id="save-btn">💾 Lưu nội dung</button>
-                <button id="cancel-btn">❌ Hủy</button>
+                <div style="margin-top: 10px;">
+                    <button id="save-btn">💾 Lưu nội dung</button>
+                    <button id="cancel-btn">❌ Hủy</button>
+                </div>
             `;
             document.getElementById('save-btn').onclick = async () => {
                 const newBody = document.getElementById('edit-textarea').value;
                 const token = localStorage.getItem('gh_token');
+                if (!token) {
+                    alert('Vui lòng đăng nhập lại.');
+                    return;
+                }
                 const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}`, {
                     method: 'PATCH',
                     headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ body: newBody })
                 });
                 if (res.ok) {
-                    alert('Đã lưu thành công!');
-                    loadContent();
-                    loadHistory();
-                } else alert('Lỗi khi lưu!');
+                    alert('✅ Đã lưu thành công!');
+                    await loadContent();
+                    await loadHistory();
+                } else {
+                    alert('❌ Lỗi khi lưu! Kiểm tra token hoặc quyền.');
+                }
             };
-            document.getElementById('cancel-btn').onclick = () => { loadContent(); loadHistory(); };
+            document.getElementById('cancel-btn').onclick = () => {
+                contentDiv.innerHTML = originalContent;
+                // Gắn lại nút Sửa vì nó đã bị xóa khỏi DOM
+                attachEditButton();
+            };
         }
 
         async function loadHistory() {
@@ -99,57 +120,74 @@
                 const events = await res.json();
                 const historyHtml = events.filter(e => e.event === 'commented' || e.event === 'renamed').map(e => `
                     <div class="history-item">
-                        <strong>${e.actor?.login || 'System'}</strong> đã ${e.event === 'commented' ? 'bình luận' : 'đổi tên'}
-                        vào lúc ${new Date(e.created_at).toLocaleString()}
+                        <strong>${e.actor?.login || 'System'}</strong> đã ${e.event === 'commented' ? 'bình luận' : 'đổi tên'} vào lúc ${new Date(e.created_at).toLocaleString()}
                     </div>
                 `).join('');
                 document.getElementById('history-area').innerHTML = `<h3>📜 Lịch sử chỉnh sửa</h3>${historyHtml || 'Chưa có hoạt động nào.'}`;
             } catch(err) { console.error(err); }
         }
 
-        // ========== KHỞI TẠO ==========
-        const token = getTokenFromUrl();
-        if (token) {
-            localStorage.setItem('gh_token', token);
-            window.history.replaceState({}, document.title, window.location.pathname);
+        function attachEditButton() {
+            const contentDiv = document.getElementById('content-area');
+            // Kiểm tra nếu nút Sửa chưa tồn tại
+            if (!document.getElementById('dynamic-edit-btn')) {
+                const editBtn = document.createElement('button');
+                editBtn.id = 'dynamic-edit-btn';
+                editBtn.textContent = '✏️ Sửa trang này';
+                editBtn.style.marginTop = '20px';
+                editBtn.onclick = async () => {
+                    let savedToken = localStorage.getItem('gh_token');
+                    if (!savedToken) {
+                        window.location.href = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=repo`;
+                        return;
+                    }
+                    const isCollaborator = await checkCollaborator(savedToken);
+                    if (isCollaborator) {
+                        const issueRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}`);
+                        const issue = await issueRes.json();
+                        showEditForm(issue.body);
+                    } else {
+                        alert('⚠️ Bạn không có quyền sửa trang này. Chỉ Collaborator mới được sửa.');
+                    }
+                };
+                contentDiv.appendChild(editBtn);
+            }
         }
 
-        // Hiển thị nội dung
-        await loadContent();
-        await loadHistory();
+        // Hàm tải các template bổ sung (menu, clock, chat)
+        async function loadTemplate(id, fileName) {
+            try {
+                const res = await fetch(`/hazun_test/templates/${fileName}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const html = await res.text();
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = html;
+            } catch (err) {
+                console.error(`Lỗi tải ${fileName}:`, err);
+            }
+        }
 
-        // Tạo nút "Sửa trang" (luôn hiển thị)
-        const editBtn = document.createElement('button');
-        editBtn.textContent = '✏️ Sửa trang này';
-        editBtn.style.marginTop = '20px';
-        editBtn.onclick = async () => {
-            const savedToken = localStorage.getItem('gh_token');
-            if (!savedToken) {
-                // Chưa đăng nhập -> chuyển hướng sang GitHub OAuth
-                window.location.href = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=repo`;
-                return;
+        // Khởi tạo toàn bộ trang
+        async function init() {
+            // Xử lý token từ URL
+            const token = getTokenFromUrl();
+            if (token) {
+                localStorage.setItem('gh_token', token);
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
-            // Đã có token -> kiểm tra quyền Collaborator
-            const isCollaborator = await checkCollaborator(savedToken);
-            if (isCollaborator) {
-                // Cho phép sửa
-                const issueRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}`);
-                const issue = await issueRes.json();
-                showEditForm(issue.body);
-            } else {
-                alert('Bạn không có quyền sửa trang này. Chỉ Collaborator mới được sửa.');
-            }
-        };
-        document.getElementById('content-area').appendChild(editBtn);
-    </script>
-    
-    <script src="templates/load.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            loadTemplate('menu', 'menu.html');
-            loadTemplate('clock', 'clock.html');
-            loadTemplate('chat', 'chat.html');
-        });
+
+            // Tải các thành phần chính
+            await loadContent();
+            await loadHistory();
+            attachEditButton();
+
+            // Tải menu, clock, chat sau khi trang đã sẵn sàng
+            loadTemplate('menu-place', 'menu.html');
+            loadTemplate('clock-place', 'clock.html');
+            loadTemplate('chat-place', 'chat.html');
+        }
+
+        init();
     </script>
 </body>
 </html>
