@@ -12,8 +12,21 @@
         button:hover { background: #2980b9; }
         .history-item { background: white; padding: 10px; margin: 10px 0; border-left: 3px solid #3498db; font-size: 0.9em; }
     </style>
+    <script>
+        fetch('/hazun_test/templates/head.html')
+            .then(res => res.text())
+            .then(html => {
+                document.head.insertAdjacentHTML('beforeend', html);
+            })
+            .catch(err => console.error('Lỗi tải bảo mật:', err));
+    </script>
 </head>
 <body>
+    <header role="banner">
+        <div id="menu"></div>
+        <div id="clock"></div>
+        <div id="chat"></div>
+    </header>
     <div id="content-area"><h1>Đang tải nội dung...</h1></div>
     <div id="history-area" style="margin-top: 30px;"></div>
 
@@ -128,6 +141,15 @@
             }
         };
         document.getElementById('content-area').appendChild(editBtn);
+    </script>
+    
+    <script src="templates/load.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTemplate('menu', 'menu.html');
+            loadTemplate('clock', 'clock.html');
+            loadTemplate('chat', 'chat.html');
+        });
     </script>
 </body>
 </html>
