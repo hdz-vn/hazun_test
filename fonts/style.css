@@ -7,7 +7,3 @@
 body {
     font-family: 'Craftype', sans-serif;
 }
-
-#menu-place, #clock-place, #chat-place {
-    min-height: 60px;
-}
