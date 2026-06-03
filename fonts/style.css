@@ -1,9 +1,13 @@
 @font-face {
     font-family: 'Craftype';
-    src: url('craftyơe.otf') format('opentype');
+    src: url('fonts/craftype.otf') format('opentype');
     font-display: swap;
 }
 
 body {
     font-family: 'Craftype', sans-serif;
+}
+
+#menu-place, #clock-place, #chat-place {
+    min-height: 60px;
 }
