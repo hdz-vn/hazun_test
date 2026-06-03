@@ -14,7 +14,6 @@
     </style>
 </head>
 <body>
-    <div id="login-area" style="text-align: right; margin-bottom: 20px;"></div>
     <div id="content-area"><h1>Đang tải nội dung...</h1></div>
     <div id="history-area" style="margin-top: 30px;"></div>
 
@@ -95,42 +94,40 @@
             } catch(err) { console.error(err); }
         }
 
-        async function init() {
-            const token = getTokenFromUrl();
-            if (token) {
-                localStorage.setItem('gh_token', token);
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-            const savedToken = localStorage.getItem('gh_token');
-            const loginArea = document.getElementById('login-area');
+        // ========== KHỞI TẠO ==========
+        const token = getTokenFromUrl();
+        if (token) {
+            localStorage.setItem('gh_token', token);
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
 
+        // Hiển thị nội dung
+        await loadContent();
+        await loadHistory();
+
+        // Tạo nút "Sửa trang" (luôn hiển thị)
+        const editBtn = document.createElement('button');
+        editBtn.textContent = '✏️ Sửa trang này';
+        editBtn.style.marginTop = '20px';
+        editBtn.onclick = async () => {
+            const savedToken = localStorage.getItem('gh_token');
             if (!savedToken) {
-                loginArea.innerHTML = `<a href="https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=repo">🔐 Đăng nhập GitHub để sửa trang</a>`;
-                await loadContent();
+                // Chưa đăng nhập -> chuyển hướng sang GitHub OAuth
+                window.location.href = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=repo`;
                 return;
             }
-
+            // Đã có token -> kiểm tra quyền Collaborator
             const isCollaborator = await checkCollaborator(savedToken);
             if (isCollaborator) {
-                loginArea.innerHTML = `✅ Đã đăng nhập (${OWNER}) | <button id="logout-btn">🚪 Đăng xuất</button>`;
-                document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('gh_token'); location.reload(); };
-                await loadContent();
-                await loadHistory();
-                const editBtn = document.createElement('button');
-                editBtn.textContent = '✏️ Sửa trang này';
-                editBtn.onclick = async () => {
-                    const issueRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}`);
-                    const issue = await issueRes.json();
-                    showEditForm(issue.body);
-                };
-                document.getElementById('content-area').appendChild(editBtn);
+                // Cho phép sửa
+                const issueRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}`);
+                const issue = await issueRes.json();
+                showEditForm(issue.body);
             } else {
-                loginArea.innerHTML = `⚠️ Bạn không có quyền sửa trang này. (${OWNER}) <button id="logout-btn">🚪 Đăng xuất</button>`;
-                document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('gh_token'); location.reload(); };
-                await loadContent();
+                alert('Bạn không có quyền sửa trang này. Chỉ Collaborator mới được sửa.');
             }
-        }
-        init();
+        };
+        document.getElementById('content-area').appendChild(editBtn);
     </script>
 </body>
 </html>
