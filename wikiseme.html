@@ -138,8 +138,8 @@
                 editBtn.onclick = async () => {
                     let savedToken = localStorage.getItem('gh_token');
                     if (!savedToken) {
-                        window.location.href = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=repo`;
-                        return;
+                        const redirectUri = window.location.href.split('#')[0]; // Lấy URL hiện tại, bỏ phần sau # (nếu có)
+                        window.location.href = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=repo`;
                     }
                     const isCollaborator = await checkCollaborator(savedToken);
                     if (isCollaborator) {
