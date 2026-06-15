@@ -63,6 +63,12 @@
             } catch(err) { console.error(err); }
         }
 
+        <div id="menu"></div>
+        <div id="clock"></div>
+        <div id="chat"></div>
+        
+        <button class="pdf-btn" onclick="window.print()">📄 Lưu trang này thành PDF</button>
+        
         <script src="templates/load.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -74,9 +80,6 @@
 
         loadContent();
         loadHistory();
-        loadTemplate('menu-place', 'menu.html');
-        loadTemplate('clock-place', 'clock.html');
-        loadTemplate('chat-place', 'chat.html');
     </script>
 </body>
 </html>
