@@ -8,8 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         .history-item { background: #f0f0f0; padding: 8px; margin: 5px 0; border-left: 3px solid #3498db; }
+        .pdf-btn { background: linear-gradient(135deg, #3498db, #2980b9); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; margin: 10px 0; display: inline-block; }
     </style>
     <script>
+        // Tải head.html (các meta bảo mật, v.v.)
         fetch('/hazun_test/templates/head.html')
             .then(res => res.text())
             .then(html => document.head.insertAdjacentHTML('beforeend', html))
@@ -22,6 +24,7 @@
         <div id="clock-place"></div>
         <div id="chat-place"></div>
     </header>
+    
     <div id="content-area"><h1>Đang tải nội dung...</h1></div>
     <div id="history-area" style="margin-top: 30px;"></div>
 
@@ -34,25 +37,36 @@
         </a>
     </div>
 
+    <!-- NÚT PDF -->
+    <div style="text-align: center;">
+        <button class="pdf-btn" onclick="window.print()">📄 Lưu trang này thành PDF</button>
+    </div>
+
     <script>
+        // ================= CẤU HÌNH =================
         const OWNER = 'haphantridungqsqn-spec';
         const REPO = 'hazun_test';
         const ISSUE_NUMBER = 1;
 
+        // ================= HÀM TẢI NỘI DUNG CHÍNH =================
         async function loadContent() {
             try {
                 const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const issue = await res.json();
                 const htmlContent = marked.parse(issue.body || '*Chưa có nội dung.*');
                 document.getElementById('content-area').innerHTML = `<div>${htmlContent}</div>`;
             } catch (err) {
+                console.error('Lỗi load content:', err);
                 document.getElementById('content-area').innerHTML = '<p>⚠️ Lỗi khi tải nội dung.</p>';
             }
         }
 
+        // ================= HÀM TẢI LỊCH SỬ =================
         async function loadHistory() {
             try {
                 const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}/timeline`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const events = await res.json();
                 const historyHtml = events.filter(e => e.event === 'commented' || e.event === 'renamed').map(e => `
                     <div class="history-item">
@@ -60,23 +74,36 @@
                     </div>
                 `).join('');
                 document.getElementById('history-area').innerHTML = `<h3>📜 Lịch sử chỉnh sửa</h3>${historyHtml || 'Chưa có hoạt động nào.'}`;
-            } catch(err) { console.error(err); }
+            } catch(err) { 
+                console.error('Lỗi load history:', err);
+                document.getElementById('history-area').innerHTML = '<p>⚠️ Không thể tải lịch sử.</p>';
+            }
         }
 
-        
-        <button class="pdf-btn" onclick="window.print()">📄 Lưu trang này thành PDF</button>
-        
-        <script src="templates/load.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                loadTemplate('menu', 'menu.html');
-                loadTemplate('clock', 'clock.html');
-                loadTemplate('chat', 'chat.html');
-            });
-        </script>
+        // ================= HÀM TẢI TEMPLATE (MENU, CLOCK, CHAT) =================
+        async function loadTemplate(id, fileName) {
+            try {
+                const res = await fetch(`/hazun_test/templates/${fileName}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const html = await res.text();
+                const element = document.getElementById(id);
+                if (element) element.innerHTML = html;
+                else console.warn(`Không tìm thấy phần tử với id: ${id}`);
+            } catch (err) {
+                console.error(`Lỗi tải template ${fileName}:`, err);
+                const element = document.getElementById(id);
+                if (element) element.innerHTML = `<p style="color:red;">⚠️ Lỗi tải ${fileName}</p>`;
+            }
+        }
 
-        loadContent();
-        loadHistory();
+        // ================= KHỞI CHẠY TOÀN BỘ TRANG =================
+        (function init() {
+            loadContent();
+            loadHistory();
+            loadTemplate('menu-place', 'menu.html');
+            loadTemplate('clock-place', 'clock.html');
+            loadTemplate('chat-place', 'chat.html');
+        })();
     </script>
 </body>
 </html>
