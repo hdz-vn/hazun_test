@@ -155,20 +155,14 @@
         }
 
         // ======================= HÀM TẢI TEMPLATE =======================
-        async function loadTemplate(id, fileName) {
-            try {
-                const res = await fetch(`/hazun_test/templates/${fileName}`);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const html = await res.text();
-                const el = document.getElementById(id);
-                if (el) el.innerHTML = html;
-            } catch (err) {
-                console.error(`Lỗi tải ${fileName}:`, err);
-                const el = document.getElementById(id);
-                if (el) el.innerHTML = `<p style="color:red;">⚠️ Không thể tải ${fileName}</p>`;
-            }
-        }
-
+        <script src="templates/load.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTemplate('menu', 'menu.html');
+            loadTemplate('clock', 'clock.html');
+            loadTemplate('chat', 'chat.html');
+        });
+    </script>
         // ======================= KHỞI TẠO =======================
         (async function init() {
             // Xử lý token từ URL
