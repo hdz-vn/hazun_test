@@ -1,60 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-<title>Wikiseme – Hazun Test</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<style>
-.history-item { background: #f0f0f0; padding: 8px; margin: 5px 0; border-left: 3px solid #3498db; }
-</style>
-<script>
-fetch('/hazun_test/templates/head.html')
-.then(res => res.text())
-.then(html => document.head.insertAdjacentHTML('beforeend', html))
-.catch(err => console.error('Lỗi tải head.html:', err));
-</script>
+    <title>Wikiseme</title>
+    
+    <script>
+        fetch('/hazun_test/templates/head.html')
+            .then(res => res.text())
+            .then(html => {
+                document.head.insertAdjacentHTML('beforeend', html);
+            })
+            .catch(err => console.error('Lỗi tải bảo mật:', err));
+    </script>
 </head>
 <body>
-<header role="banner">
-<div id="menu-place"></div>
-<div id="clock-place"></div>
-<div id="chat-place"></div>
-</header>
-<div id="content-area"><h1>Đang tải nội dung...</h1></div>
-<div id="history-area" style="margin-top: 30px;"></div>
+    <header role="banner">
+        <div id="menu"></div>
+        <div id="clock"></div>
+        <div id="chat"></div>
+    </header>
 
-    <!-- NÚT SỬA TRÊN GITHUB -->
-    <div style="text-align: center; margin: 30px 0;">
-        <a href="https://github.com/haphantridungqsqn-spec/hazun_test/issues/1" 
-           target="_blank" 
-           style="background: #3498db; color: white; padding: 10px 20px; border-radius: 40px; text-decoration: none; display: inline-block;">
-            ✏️ Sửa nội dung trên GitHub
-        </a>
-    </div>
+    <main role="main">
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="https://github.com/haphantridungqsqn-spec/hazun_test/issues/1" 
+               target="_blank" 
+               style="background: #3498db; color: white; padding: 10px 20px; border-radius: 40px; text-decoration: none; display: inline-block;">
+                ✏️ Sửa nội dung trên GitHub
+            </a>
+        </div>
+    </main>
 
-<script>
-const OWNER = 'haphantridungqsqn-spec';
-const REPO = 'hazun_test';
-const ISSUE_NUMBER = 1;
+    <footer role="contentinfo">
+        <button class="pdf-btn" onclick="window.print()">📄 Lưu trang này thành PDF</button>
+    </footer>
 
-async function loadContent() {
-try {
-const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}`);
-const issue = await res.json();
-const htmlContent = marked.parse(issue.body || '*Chưa có nội dung.*');
-document.getElementById('content-area').innerHTML = `<div>${htmlContent}</div>`;
-} catch (err) {
-document.getElementById('content-area').innerHTML = '<p>⚠️ Lỗi khi tải nội dung.</p>';
-}
-}
-
-async function loadHistory() {
-try {
-const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}/timeline`);
-const events = await res.json();
-const historyHtml = events.filter(e => e.event === 'commented' || e.event === 'renamed').map(e => `
-                   <div class="history-item">
-                       <strong>${e.actor?.login || 'System'}</strong> đã ${e.event} vào lúc ${new Date(e.created_at).toLocaleString()}
-                   </div>
+    <script src="templates/load.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTemplate('menu', 'menu.html');
+            loadTemplate('clock', 'clock.html');
+            loadTemplate('chat', 'chat.html');
+        });
+    </script>
+</body>
+</html>
